@@ -12,10 +12,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call(MenHaircutScheduleSeeder::class);
+        $this->call(WomanHaircutScheduleSeeder::class);
         $this->call(AppointmentSeeder::class);
-
-//        $this->call(TestSeeder::class);
-
-//        $this->call(WomanHaircutScheduleSeeder::class);
     }
 }

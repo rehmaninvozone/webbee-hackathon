@@ -30,22 +30,22 @@ class AppointmentTest extends TestCase
     public function test_a_user_can_book_appointment_on_holiday(): void
     {
         $this->data['date'] = now()->addDays(2)->format('Y-m-d');
-        $response = $this->postJson(route('bookAppointment'), $this->data);
-        $response->assertStatus(422);
-        $response->assertJson([
-            'message' => 'Not Available Holiday',
-        ]);
+        $this->postJson(route('bookAppointment'), $this->data)
+            ->assertUnprocessable()
+            ->assertJson([
+                'message' => 'Not Available Holiday',
+            ]);
     }
 
     public function test_a_user_can_exceed_future_book_appointment_limit(): void
     {
         $this->data['date'] = now()->addDays(8)->format('Y-m-d');
-        $response = $this->postJson(route('bookAppointment'), $this->data);
         $scheduling = Scheduling::find($this->data['scheduling_id']);
-        $response->assertStatus(422);
-        $response->assertJson([
-            'message' => 'You can only book ' . $scheduling->days_in_advance . ' days in advance',
-        ]);
+        $this->postJson(route('bookAppointment'), $this->data)
+            ->assertUnprocessable()
+            ->assertJson([
+                'message' => 'You can only book ' . $scheduling->days_in_advance . ' days in advance',
+            ]);
     }
 
     public function test_a_user_can_book_appointment_between_appointments(): void
@@ -53,11 +53,11 @@ class AppointmentTest extends TestCase
         $this->data['date'] = now()->format('Y-m-d');
         $this->data['start_time'] = now()->format('Y-m-d') . ' 08:00:00';
         $this->data['end_time'] = now()->format('Y-m-d') . ' 08:09:00';
-        $response = $this->postJson(route('bookAppointment'), $this->data);
-        $response->assertStatus(422);
-        $response->assertJson([
-            'message' => 'Selected Appointment Time is Between Already Booked Appointment',
-        ]);
+        $this->postJson(route('bookAppointment'), $this->data)
+            ->assertUnprocessable()
+            ->assertJson([
+                'message' => 'Selected Appointment Time is Between Already Booked Appointment',
+            ]);
     }
 
     public function test_a_user_can_book_non_existing_slot(): void
@@ -65,11 +65,11 @@ class AppointmentTest extends TestCase
         $this->data['start_time'] = now()->format('Y-m-d') . ' 07:00:00';
         $this->data['end_time'] = now()->format('Y-m-d') . ' 07:10:00';
         $this->data['date'] = now()->format('Y-m-d');
-        $response = $this->postJson(route('bookAppointment'), $this->data);
-        $response->assertStatus(404);
-        $response->assertJson([
-            'message' => 'Slot Does’t Exists',
-        ]);
+        $this->postJson(route('bookAppointment'), $this->data)
+            ->assertNotFound()
+            ->assertJson([
+                'message' => 'Slot Does’t Exists',
+            ]);
     }
 
     public function test_a_user_can_book_booked_appointment(): void
@@ -77,11 +77,12 @@ class AppointmentTest extends TestCase
         $this->data['date'] = now()->format('Y-m-d');
         $this->data['start_time'] = now()->format('Y-m-d') . ' 08:00:00';
         $this->data['end_time'] = now()->format('Y-m-d') . ' 08:10:00';
-        $response = $this->postJson(route('bookAppointment'), $this->data);
-        $response->assertStatus(422);
-        $response->assertJson([
-            'message' => 'Selected Appointment Time is Already Booked',
-        ]);
+        $this->postJson(route('bookAppointment'), $this->data)
+            ->assertUnprocessable()
+            ->assertJson([
+                'message' => 'Selected Appointment Time is Already Booked',
+            ]);
+
     }
 
     public function test_a_user_can_book_appointment_between_break(): void
@@ -89,10 +90,10 @@ class AppointmentTest extends TestCase
         $this->data['date'] = now()->format('Y-m-d');
         $this->data['start_time'] = now()->format('Y-m-d') . ' 08:00:00';
         $this->data['end_time'] = now()->format('Y-m-d') . ' 08:15:00';
-        $response = $this->postJson(route('bookAppointment'), $this->data);
-        $response->assertStatus(422);
-        $response->assertJson([
-            'message' => 'Not Available Break Time',
-        ]);
+        $this->postJson(route('bookAppointment'), $this->data)
+            ->assertUnprocessable()
+            ->assertJson([
+                'message' => 'Not Available Break Time',
+            ]);
     }
 }

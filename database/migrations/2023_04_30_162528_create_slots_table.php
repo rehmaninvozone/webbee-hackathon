@@ -15,7 +15,6 @@ return new class extends Migration {
             $table->foreignId('scheduling_id')->constrained();
             $table->foreignId('appointment_id')->nullable()->constrained();
             $table->date('date');
-            $table->integer('day_of_week');
             $table->time('start_time');
             $table->time('end_time');
             $table->boolean('is_available')->default(true);

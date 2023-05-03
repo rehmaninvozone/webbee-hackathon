@@ -85,7 +85,6 @@ class WomanHaircutScheduleSeeder extends Seeder
                 //creating a weekly schedule
                 $scheduling->schedulingDays()
                     ->create([
-                        'day_of_week' => $dayOfWeek,
                         'date' => $startDate,
                         'opening_time' => $startTime,
                         'closing_time' => $endTime
@@ -104,7 +103,6 @@ class WomanHaircutScheduleSeeder extends Seeder
                         //creating weekly available slots
                         $scheduling->slots()
                             ->create([
-                                'day_of_week' => $dayOfWeek,
                                 'date' => $startDate,
                                 'start_time' => $slotStartTime,
                                 'end_time' => $slotEndTime

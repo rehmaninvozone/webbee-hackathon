@@ -65,9 +65,7 @@ class SchedulingController extends Controller
                         ]);
                 }
             }
-
-            $dayOfWeek = $startDate->dayOfWeek;
-
+            
             // Set the start and end times for each day
             $startTime = Carbon::createFromTime($request['opening_closing_time'][$index]['opening_time'], 0, 0)->setDateFrom($startDate);
             $endTime = Carbon::createFromTime($request['opening_closing_time'][$index]['closing_time'], 0, 0)->setDateFrom($startDate);
@@ -75,7 +73,6 @@ class SchedulingController extends Controller
             //creating a weekly schedule
             $scheduling->schedulingDays()
                 ->create([
-                    'day_of_week' => $dayOfWeek,
                     'date' => $startDate,
                     'opening_time' => $startTime,
                     'closing_time' => $endTime
@@ -94,7 +91,6 @@ class SchedulingController extends Controller
                     //creating weekly available slots
                     $scheduling->slots()
                         ->create([
-                            'day_of_week' => $dayOfWeek,
                             'date' => $startDate,
                             'start_time' => $slotStartTime,
                             'end_time' => $slotEndTime

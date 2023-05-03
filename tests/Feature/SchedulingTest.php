@@ -38,13 +38,13 @@ class SchedulingTest extends TestCase
 
     public function test_a_user_can_create_schedule(): void
     {
-        $response = $this->postJson(route('schedulings.store'), $this->data);
-        $response->assertCreated();
-        $response->assertJson([
-            'data' => [
-                "name" => "Men's Haircut",
-            ],
-        ]);
+        $this->postJson(route('schedulings.store'), $this->data)
+            ->assertCreated()
+            ->assertJson([
+                'data' => [
+                    "name" => "Men's Haircut",
+                ],
+            ]);
     }
 }
 

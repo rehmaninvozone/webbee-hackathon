@@ -13,8 +13,6 @@ class SchedulingDay extends Model
 
     protected $fillable = [
         'scheduling_id',
-        'day_of_week',
-        'is_open',
         'date',
         'opening_time',
         'closing_time',
